@@ -35,6 +35,8 @@ The existence of this project (at least in its current form) wouldn't've been po
 
 [GSAP](https://github.com/greensock/GSAP) by [greensock](https://github.com/greensock)
 
+[Sparkly Button](https://codepen.io/simeydotme/pen/WNawXQM) by [Simon Goellner](https://codepen.io/simeydotme)
+
 [JTB studios - Link](https://codepen.io/zzznicob/pen/GRPgKLM) by [Nico](https://codepen.io/zzznicob)
 
 [Text Hover Effect](https://ui.aceternity.com/components/text-hover-effect) by [Aceternity UI](https://ui.aceternity.com/)
