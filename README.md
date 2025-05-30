@@ -5,6 +5,10 @@ Spend less time designing UI from the ground up and more time building the featu
 
 Check it out at https://namer-ui-for-vue.netlify.app/
 
+![Home page](https://raw.githubusercontent.com/Northstrix/namer-ui-for-vue/refs/heads/main/screenshots/preview.png)
+
+![Component page](https://raw.githubusercontent.com/Northstrix/namer-ui-for-vue/refs/heads/main/screenshots/shamayim-toggle-switch.png)
+
 # Credit
 
 The existence of this project (at least in its current form) wouldn't've been possible without the following:
