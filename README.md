@@ -1,4 +1,4 @@
-# namer-ui-for-vue
+# Namer UI For Vue
 A collection of customizable, reusable TypeScript, vanilla CSS components for Vue 3.
 
 Spend less time designing UI from the ground up and more time building the features that matter to your users.
@@ -20,6 +20,8 @@ The existence of this project (at least in its current form) wouldn't've been po
 [BUTTONS](https://codepen.io/uchihaclan/pen/NWOyRWy) by [TAYLOR](https://codepen.io/uchihaclan)
 
 [Bento Grid](https://ui.aceternity.com/components/bento-grid) by [Aceternity UI](https://ui.aceternity.com/)
+
+[Cards with inverted border-radius #scss](https://codepen.io/kristen17/pen/pomgrKp) by [Kristen](https://codepen.io/kristen17)
 
 [Lucide Vue](https://www.npmjs.com/package/lucide-vue-next)
 
