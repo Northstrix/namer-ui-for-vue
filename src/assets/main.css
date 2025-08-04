@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;400;500;600;700;900&display=swap');
+
+/* Global styles with Noto Sans as the font-family */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #111014;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  font-weight: 400;
+  color: #e1e1e1;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* Content container styles */
+.content-container {
+  max-width: 1480px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  transition: padding 0.2s ease-in-out;
+  box-sizing: border-box;
+}
+
+/* For Firefox: Only solid color possible */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #4776cb #373441;
+}
+
+/* For WebKit browsers: Gradient handle */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #33313d;
+  border-radius: 100vh;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606);
+  border-radius: 100vh;
+}
+
+.my-toast {
+  background: #24222b !important;
+  outline: 1px solid #33313d !important;
+  box-shadow: none !important;
+  padding: 0.75em 1em !important;
+  min-width: 220px;
+  max-width: 400px;
+}
+
+/* Gradient text for toast title and content */
+.my-toast .swal2-title,
+.my-toast .swal2-html-container {
+  background: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Change the timer progress bar color */
+.my-toast .swal2-timer-progress-bar {
+  background: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606) !important;
+}
+
+/* Optional: If you ever use the default icon, keep this for reference */
+.my-toast .swal2-icon-content {
+  color: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606) !important;
+}
+
+/* Custom flex layout for icon left, text right */
+.my-toast .toast-flex {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+}
+
+.my-toast .toast-logo {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 0px;
+  flex-shrink: 0;
+  margin-left: -12px;
+  background: transparent !important;
+}
+
+.my-toast .toast-flex {
+  background: transparent !important;
+}
+
+.my-toast .toast-message {
+  font-size: 1rem;
+  line-height: 1.3;
+  background: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
