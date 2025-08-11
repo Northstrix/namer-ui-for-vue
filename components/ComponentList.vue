@@ -3,19 +3,23 @@
     <div class="sidebar-all">
       <span class="sidebar-all-label">All components</span>
     </div>
-    <div
+    <a
       v-for="meta in sortedItems"
       :key="meta.route"
       class="sidebar-item"
       :class="{ active: activeRoute === meta.route, hovered: hovered === meta.route }"
-      @click="goTo(meta.route)"
+      :href="`/components/${meta.route}`"
+      @click="handleClick($event, meta.route)"
       @mouseenter="hovered = meta.route"
       @mouseleave="hovered = null"
     >
-      <span class="sidebar-item-label" :class="{ 'gradient-text': activeRoute === meta.route }">
+      <span
+        class="sidebar-item-label"
+        :class="{ 'gradient-text': activeRoute === meta.route }"
+      >
         {{ meta.name }}
       </span>
-    </div>
+    </a>
   </nav>
 </template>
 
@@ -31,7 +35,6 @@ const props = defineProps<{
 
 const router = useRouter()
 const route = useRoute()
-
 const hovered = ref<string | null>(null)
 
 const activeRoute = computed(() => props.activeRoute ?? route.params.name)
@@ -40,10 +43,26 @@ const sortedItems = computed(() =>
   [...props.items].sort((a, b) => a.name.localeCompare(b.name))
 )
 
+/**
+ * Handles click on sidebar item links.
+ * Prevents default browser navigation for normal left clicks,
+ * allows middle/right clicks and modifier clicks.
+ */
+function handleClick(event: MouseEvent, routeName: string) {
+  const isLeftClick = event.button === 0
+  const hasModifier = event.metaKey || event.ctrlKey || event.shiftKey || event.altKey
+
+  if (isLeftClick && !hasModifier) {
+    event.preventDefault()
+    event.stopPropagation()
+    goTo(routeName)
+  }
+}
+
 function goTo(routeName: string) {
   if (activeRoute.value !== routeName) {
-    router.push(`/components/${routeName}`)
     fireAnalyticsForListClick(routeName)
+    router.push(`/components/${routeName}`)
   }
 }
 </script>
@@ -82,8 +101,11 @@ function goTo(routeName: string) {
   display: inline-block;
   padding-left: 0;
 }
+
+/* Override global link color for this component */
 .sidebar-item {
-  color: #aaa;
+  color: #aaa !important; /* default inactive text color */
+  text-decoration: none;
   font-size: 0.875rem;
   padding: 10px 24px 10px 0;
   cursor: pointer;
@@ -110,6 +132,8 @@ function goTo(routeName: string) {
   font-size: inherit;
   font-weight: inherit;
 }
+
+/* Active item text */
 .gradient-text {
   color: transparent !important;
   background: linear-gradient(135deg, #4776cb, #a19fe5, #6cc606);
@@ -117,10 +141,16 @@ function goTo(routeName: string) {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+/* Hover effect for inactive items */
+.sidebar-item.hovered:not(.active) {
+  color: #fff !important; /* hovered inactive color */
+}
 .sidebar-item.hovered:not(.active) .sidebar-item-label {
-  color: #fff;
   transform: translateX(8px);
 }
+
+/* Vertical line on hover */
 .sidebar-item::before {
   content: "";
   display: block;
@@ -137,6 +167,5 @@ function goTo(routeName: string) {
 }
 .sidebar-item.hovered:not(.active)::before {
   opacity: 1;
-  transition: opacity 0.12s cubic-bezier(.4,1,.6,1);
 }
 </style>
