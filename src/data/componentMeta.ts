@@ -8249,7 +8249,7 @@ function drawTendrils(centerX: number, centerY: number, count: number, timeVal: 
     const baseAngle = i * angleStep + timeVal * 0.2
     const length = maxLength * (0.5 + Math.sin(timeVal * 0.3 + i) * 0.5)
     ctx.beginPath()
-    ctx.strokeStyle = rgba(255,255,255,0)
+    ctx.strokeStyle = \`rgba(255,255,255,0)\`
     ctx.lineWidth = props.strokeWidth * (1 + Math.sin(timeVal * 0.5 + i * 2) * 0.2)
     let x = centerX
     let y = centerY
