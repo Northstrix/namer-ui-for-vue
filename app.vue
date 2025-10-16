@@ -39,7 +39,8 @@ import Footer from './components/Footer.vue'
 const { isMobile } = useIsMobile()
 const routes = [
   { name: 'Components', link: '/components', external: false },
-  { name: 'Next.js Components', link: 'https://namer-ui.netlify.app/', external: true }
+  { name: 'Next.js Components', link: 'https://namer-ui.netlify.app/', external: true },
+  { name: 'Showcase', link: '/showcase', external: false },
 ]
 
 const showSearchModal = ref(false)

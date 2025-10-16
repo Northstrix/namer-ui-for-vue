@@ -11644,4 +11644,429 @@ watch([duration, repeatCount], () => {
     credit: `[Dot Loader](https://21st.dev/paceui/dot-loader/default) by [PaceUI](https://www.paceui.com/)`,
     previewType: 'center',
   },
+  {
+    name: 'Submit Card',
+    route: 'submit-card',
+    description: 'An interactive, animated card designed to prompt submission actions.',
+    usage: `<script setup lang="ts">
+import SubmitCard from './SubmitCard.vue'
+
+// Dark theme props
+const darkThemeProps = {
+  backgroundColor: '#0a0a0a',
+  borderColor: '#262626',
+  innerAreaBorderColor: '#262626',
+  aspectBgColor: '#111',
+  squareBgColor: '#fff',
+  plusIconColor: '#00a7fa',
+  textColorTitle: '#fff',
+  textColorDescription: '#aaa',
+}
+
+// Light theme props
+const lightThemeProps = {
+  backgroundColor: '#f9f9f9',
+  borderColor: '#ccc',
+  innerAreaBorderColor: '#d5d5d5',
+  aspectBgColor: '#e1e1e1',
+  squareBgColor: '#222',
+  plusIconColor: '#d500ff',
+  textColorTitle: '#222',
+  textColorDescription: '#555',
+}
+</script>
+
+<template>
+  <div
+    style="
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      width: 100%;
+      margin: auto;
+      box-sizing: border-box;
+    "
+  >
+    <!-- First Card -->
+    <SubmitCard
+      link="https://blueberry-loom-form-loader.netlify.app/form/bWF4aW0uYm9ydC5kZXZlbEBnbWFpbC5jb20=/Far247Squ6?key=Im5uylqLi3BwlN909sLP1Y3vY6nRwMixa8D6BGpj6Uz5B4b9OO)YZSyKWvCGeX65a6Yfsc2ZdUAEWrue3FXDDg=="
+      title="Submit Your Project"
+      description="Made a project that uses at least one Namer UI component? Submit it now for a chance to get featured!"
+      :backgroundColor="darkThemeProps.backgroundColor"
+      :cardBorderColor="darkThemeProps.borderColor"
+      :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
+      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :squareBgColor="darkThemeProps.squareBgColor"
+      :plusIconColor="darkThemeProps.plusIconColor"
+      :textColorTitle="darkThemeProps.textColorTitle"
+      :textColorDescription="darkThemeProps.textColorDescription"
+      :isRTL="false"
+    />
+
+    <!-- Second Card (Hebrew RTL) -->
+    <SubmitCard
+      link="https://blueberry-loom-form-loader.netlify.app/form/bWF4aW0uYm9ydC5kZXZlbEBnbWFpbC5jb20=/Far247Squ6?key=Im5uylqLi3BwlN909sLP1Y3vY6nRwMixa8D6BGpj6Uz5B4b9OO)YZSyKWvCGeX65a6Yfsc2ZdUAEWrue3FXDDg=="
+      title="שלח את הפרויקט שלך"
+      description="יצרת פרויקט המשתמש בלפחות רכיב אחד של נמר UI? שלח אותו עכשיו כדי לקבל הזדמנות להופיע!"
+      :backgroundColor="lightThemeProps.backgroundColor"
+      :cardBorderColor="lightThemeProps.borderColor"
+      :innerAreaBorderColor="lightThemeProps.innerAreaBorderColor"
+      :aspectBgColor="lightThemeProps.aspectBgColor"
+      :squareBgColor="lightThemeProps.squareBgColor"
+      :plusIconColor="lightThemeProps.plusIconColor"
+      :textColorTitle="lightThemeProps.textColorTitle"
+      :textColorDescription="lightThemeProps.textColorDescription"
+      :isRTL="true"
+    />
+
+    <!-- Third Card with image -->
+    <SubmitCard
+      link="https://clandestine-beauty-salon-landing-page.netlify.app/"
+      title="Clandestine"
+      description="A modern beauty salon landing page template featuring an appointment reservation UI and multilingual support."
+      imageSrc="https://github.com/Northstrix/namer-ui/blob/main/public/showcase/clandestine.webp?raw=true"
+      :backgroundColor="darkThemeProps.backgroundColor"
+      :cardBorderColor="darkThemeProps.borderColor"
+      :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
+      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :squareBgColor="darkThemeProps.squareBgColor"
+      :plusIconColor="darkThemeProps.plusIconColor"
+      :textColorTitle="darkThemeProps.textColorTitle"
+      :textColorDescription="darkThemeProps.textColorDescription"
+      :imageSrc="placeholderImage"
+      :isRTL="false"
+    />
+  </div>
+</template>
+
+// Note: The SubmitCard component accepts the following props:
+// - isRTL: boolean (optional) - Enables right-to-left layout direction. Default: false.
+// - link: string (required) - Target URL for the clickable card. Can be a relative or external HTTP/HTTPS link.
+// - textShiftDurationMs: number (optional) - Duration in milliseconds for the text shift animation when hovered. Default: 200.
+// - plusIconDurationMs: number (optional) - Duration in milliseconds for the plus icon rotation animation. Default: 400.
+// - otherDurationMs: number (optional) - Duration in milliseconds for all other transitions (container movement, borders, etc.). Default: 300.
+// - textShiftDistance: string (optional) - Horizontal displacement distance applied to text when hovered. Default: "6px".
+// - padding: string (optional) - Padding applied inside the card container. Default: "16px".
+// - backgroundColor: string (optional) - Background color of the outer card. Default: "#0a0a0a".
+// - cardBorderColor: string (optional) - Border color for the card container. Default: "#262626".
+// - innerAreaBorderColor: string (optional) - Border color for the inner area and the moving square. Default: "#262626".
+// - aspectBgColor: string (optional) - Background color for the inner aspect-ratio area. Default: "#111".
+// - squareBgColor: string (optional) - Background color for the moving square element. Default: "#fff".
+// - borderRadius: string (optional) - Radius applied to all rounded edges. Default: "8px".
+// - borderWidthOuter: string (optional) - Width of the card container border. Default: "1px".
+// - borderWidthInner: string (optional) - Width of the inner area and square borders. Default: "1px".
+// - borderWidthDashed: string (optional) - Width of the dashed hover outline. Default: "1px".
+// - title: string (required) - Main title text displayed on the card.
+// - description: string (optional) - Supporting description text displayed below the title. Default: "".
+// - titleFontSize: string (optional) - Font size for the title text. Default: "22px".
+// - descriptionFontSize: string (optional) - Font size for the description text. Default: "14px".
+// - titleMarginTop: string (optional) - Margin above the title text. Default: "0".
+// - gapBetweenTitleDesc: string (optional) - Vertical space between title and description. Default: "8px".
+// - textColorTitle: string (optional) - Color of the title text. Default: "#fff".
+// - textColorDescription: string (optional) - Color of the description text. Default: "#aaa".
+// - aspectRatio: string (optional) - Aspect ratio of the inner area (CSS value like "16/10"). Default: "16/10".
+// - squareHeightPercent: number (optional) - Height percentage of the animated square relative to the container. Default: 50.
+// - plusIconColor: string (optional) - Stroke color of the plus icon. Default: "#00a7fa".
+// - imageSrc: string (optional) - Source URL of an image. When provided, replaces the inner area content with an image preserving the aspect ratio.
+//
+// Emits:
+//   None (all hover animations and link actions are internal).
+//
+// Slots:
+//   None.
+`,
+    code: [
+      {
+        filename: 'SubmitCard.vue',
+        content: `<script setup lang="ts">
+import { ref, computed, watch } from "vue";
+
+const props = defineProps({
+  isRTL: { type: Boolean, default: false },
+  link: { type: String, required: true },
+  textShiftDurationMs: { type: Number, default: 200 },
+  plusIconDurationMs: { type: Number, default: 400 },
+  otherDurationMs: { type: Number, default: 300 },
+  textShiftDistance: { type: String, default: "6px" },
+  padding: { type: String, default: "16px" },
+  backgroundColor: { type: String, default: "#0a0a0a" },
+  cardBorderColor: { type: String, default: "#262626" },
+  innerAreaBorderColor: { type: String, default: "#262626" },
+  aspectBgColor: { type: String, default: "#111" },
+  squareBgColor: { type: String, default: "#fff" },
+  borderRadius: { type: String, default: "8px" },
+  borderWidthOuter: { type: String, default: "1px" },
+  borderWidthInner: { type: String, default: "1px" },
+  borderWidthDashed: { type: String, default: "1px" },
+  title: { type: String, required: true },
+  description: { type: String, default: "" },
+  titleFontSize: { type: String, default: "22px" },
+  descriptionFontSize: { type: String, default: "14px" },
+  titleMarginTop: { type: String, default: "0" },
+  descriptionMarginBottom: { type: String, default: "0" },
+  gapBetweenTitleDesc: { type: String, default: "8px" },
+  textColorTitle: { type: String, default: "#fff" },
+  textColorDescription: { type: String, default: "#aaa" },
+  aspectRatio: { type: String, default: "16/10" },
+  squareHeightPercent: { type: Number, default: 50 },
+  plusIconColor: { type: String, default: "#00a7fa" },
+  imageSrc: { type: String, default: "" }
+});
+
+const hover = ref(false);
+const iconState = ref<"idle" | "spinningCW" | "spinningCCW">("idle");
+
+const shiftX = computed(() => {
+  let px = parseInt(props.textShiftDistance);
+  if (isNaN(px)) px = 6;
+  return props.isRTL ? -px : px;
+});
+
+const isExternal = computed(() => /^https?:\/\//i.test(props.link));
+
+watch(hover, (value) => {
+  iconState.value = value ? "spinningCW" : "spinningCCW";
+});
+</script>
+
+<template>
+  <a
+    class="submit-card"
+    :class="{ hovered: hover }"
+    :href="link"
+    :target="isExternal ? '_blank' : null"
+    :rel="isExternal ? 'noopener noreferrer' : null"
+    :style="{
+      backgroundColor,
+      borderColor: cardBorderColor,
+      borderWidth: borderWidthOuter,
+      borderRadius,
+      padding,
+      direction: isRTL ? 'rtl' : 'ltr',
+      width: '100%',
+      boxSizing: 'border-box',
+      cursor: 'pointer',
+      textDecoration: 'none',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'stretch',
+      flex: '1 1 0',
+      transition: \`border-color \${otherDurationMs}ms ease\`
+    }"
+    @mouseenter="hover = true"
+    @mouseleave="hover = false"
+  >
+    <!-- Image mode -->
+    <div
+      v-if="imageSrc"
+      class="aspect-ratio-container"
+      :style="{
+        aspectRatio,
+        backgroundColor: aspectBgColor,
+        border: borderWidthInner + ' solid ' + innerAreaBorderColor,
+        borderRadius,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        width: '100%',
+        position: 'relative',
+        transition: \`all \${otherDurationMs}ms ease\`
+      }"
+    >
+      <img
+        :src="imageSrc"
+        alt=""
+        :style="{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          borderRadius: borderRadius
+        }"
+      />
+    </div>
+
+    <!-- Regular mode -->
+    <div
+      v-else
+      class="aspect-ratio-container"
+      :style="{
+        aspectRatio,
+        backgroundColor: aspectBgColor,
+        border: borderWidthInner + ' solid ' + innerAreaBorderColor,
+        borderRadius,
+        display: 'grid',
+        placeItems: 'center',
+        overflow: 'visible',
+        transform: isRTL ? 'scaleX(-1)' : 'none',
+        width: '100%',
+        position: 'relative',
+        transition: \`all \${otherDurationMs}ms ease\`
+      }"
+    >
+      <div
+        class="dashed-border"
+        :class="{ visible: hover }"
+        :style="{
+          height: squareHeightPercent + '%',
+          aspectRatio: '1 / 1',
+          borderColor: plusIconColor,
+          borderWidth: borderWidthDashed,
+          borderRadius,
+          transition: \`opacity \${otherDurationMs}ms ease\`,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 1
+        }"
+      ></div>
+
+      <div
+        class="square-container"
+        :style="{
+          backgroundColor: squareBgColor,
+          height: squareHeightPercent + '%',
+          aspectRatio: '1 / 1',
+          border: borderWidthInner + ' solid ' + innerAreaBorderColor,
+          borderRadius,
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: hover
+            ? 'translate(calc(-50% + 15px), calc(-50% - 15px))'
+            : 'translate(-50%, -50%)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          overflow: 'visible',
+          transition: \`transform \${otherDurationMs}ms ease\`,
+          zIndex: 2
+        }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="42"
+          height="42"
+          viewBox="0 0 24 24"
+          fill="none"
+          :stroke="plusIconColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          :class="{
+            spinCW: iconState === 'spinningCW',
+            spinCCW: iconState === 'spinningCCW'
+          }"
+          style="user-select: none;"
+          :style="{ '--plusDur': plusIconDurationMs + 'ms' }"
+        >
+          <path d="M5 12h14" />
+          <path d="M12 5v14" />
+        </svg>
+      </div>
+    </div>
+
+    <!-- Text area -->
+    <div
+      class="text-content"
+      :style="{
+        marginTop: '16px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: gapBetweenTitleDesc,
+        textAlign: isRTL ? 'right' : 'left',
+        color: textColorTitle,
+        userSelect: 'none',
+        justifyContent: 'flex-start',
+        flexGrow: 1,
+        transition: \`transform \${textShiftDurationMs}ms ease\`,
+        transform: hover ? \`translateX(\${shiftX}px)\` : 'translateX(0)'
+      }"
+    >
+      <h3
+        class="title"
+        :style="{
+          fontSize: titleFontSize,
+          marginTop: titleMarginTop,
+          marginBottom: 0,
+          fontWeight: 600,
+          color: textColorTitle,
+          width: '100%',
+          overflowWrap: 'break-word',
+          wordBreak: 'normal'
+        }"
+      >
+        {{ title }}
+      </h3>
+
+      <p
+        v-if="description"
+        class="description"
+        :style="{
+          fontSize: descriptionFontSize,
+          marginTop: 0,
+          marginBottom: descriptionMarginBottom,
+          color: textColorDescription,
+          fontWeight: 400,
+          width: '100%',
+          overflowWrap: 'break-word',
+          wordBreak: 'normal'
+        }"
+      >
+        {{ description }}
+      </p>
+    </div>
+  </a>
+</template>
+
+<style scoped>
+.submit-card {
+  border-style: solid;
+}
+.aspect-ratio-container {
+  position: relative;
+  width: 100%;
+}
+.dashed-border {
+  border-style: dashed;
+  opacity: 0;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+.dashed-border.visible {
+  opacity: 1;
+}
+@keyframes spinCW {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinCCW {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+svg.spinCW {
+  animation: spinCW var(--plusDur, 400ms) ease-in-out 1;
+}
+svg.spinCCW {
+  animation: spinCCW var(--plusDur, 400ms) ease-in-out 1;
+}
+</style>
+` }
+    ],
+    dependencies: ``,
+    credit: `[AnimateIcons](https://animateicons.vercel.app/)
+[File Upload](https://ui.aceternity.com/components/file-upload) by [Aceternity UI](https://ui.aceternity.com/)`,
+    previewType: 'image',
+    imageLink: '/previews/submit-card.webp'
+  },
 ];
