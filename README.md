@@ -43,4 +43,8 @@ The existence of this project (at least in its current form) wouldn't've been po
 
 [Text Hover Effect](https://ui.aceternity.com/components/text-hover-effect) by [Aceternity UI](https://ui.aceternity.com/)
 
+[AnimateIcons](https://animateicons.vercel.app/)
+
+[File Upload](https://ui.aceternity.com/components/file-upload) by [Aceternity UI](https://ui.aceternity.com/)
+
 [Perplexity](https://www.perplexity.ai/)
