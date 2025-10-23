@@ -12,7 +12,7 @@ const props = defineProps({
   backgroundColor: { type: String, default: "#0a0a0a" },
   cardBorderColor: { type: String, default: "#262626" },
   innerAreaBorderColor: { type: String, default: "#262626" },
-  aspectBgColor: { type: String, default: "#111" },
+  innerAreaBgColor: { type: String, default: "#111" },
   squareBgColor: { type: String, default: "#fff" },
   borderRadius: { type: String, default: "8px" },
   borderWidthOuter: { type: String, default: "1px" },
@@ -30,11 +30,12 @@ const props = defineProps({
   aspectRatio: { type: String, default: "16/10" },
   squareHeightPercent: { type: Number, default: 50 },
   plusIconColor: { type: String, default: "#00a7fa" },
-  imageSrc: { type: String, default: "" }
+  imageSrc: { type: String, default: "" },
 });
 
 const hover = ref(false);
 const iconState = ref<"idle" | "spinningCW" | "spinningCCW">("idle");
+const imageError = ref(false);
 
 const shiftX = computed(() => {
   let px = parseInt(props.textShiftDistance);
@@ -47,6 +48,10 @@ const isExternal = computed(() => /^https?:\/\//i.test(props.link));
 watch(hover, (value) => {
   iconState.value = value ? "spinningCW" : "spinningCCW";
 });
+
+function handleImageError() {
+  imageError.value = true;
+}
 </script>
 
 <template>
@@ -76,13 +81,13 @@ watch(hover, (value) => {
     @mouseenter="hover = true"
     @mouseleave="hover = false"
   >
-    <!-- Image mode -->
+    <!-- Image Handling -->
     <div
       v-if="imageSrc"
       class="aspect-ratio-container"
       :style="{
         aspectRatio,
-        backgroundColor: aspectBgColor,
+        backgroundColor: innerAreaBgColor,
         border: borderWidthInner + ' solid ' + innerAreaBorderColor,
         borderRadius,
         display: 'flex',
@@ -95,24 +100,38 @@ watch(hover, (value) => {
       }"
     >
       <img
+        v-if="!imageError"
         :src="imageSrc"
         alt=""
+        class="image"
         :style="{
           width: '100%',
           height: '100%',
           objectFit: 'cover',
           borderRadius: borderRadius
         }"
+        @error="handleImageError"
       />
+      <div
+        v-else
+        class="broken-fallback"
+        :style="{
+          border: borderWidthInner + ' solid ' + innerAreaBorderColor,
+          borderRadius,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'transparent'
+        }"
+      ></div>
     </div>
 
-    <!-- Regular mode -->
+    <!-- Regular Mode -->
     <div
       v-else
       class="aspect-ratio-container"
       :style="{
         aspectRatio,
-        backgroundColor: aspectBgColor,
+        backgroundColor: innerAreaBgColor,
         border: borderWidthInner + ' solid ' + innerAreaBorderColor,
         borderRadius,
         display: 'grid',
@@ -220,7 +239,6 @@ watch(hover, (value) => {
       >
         {{ title }}
       </h3>
-
       <p
         v-if="description"
         class="description"
@@ -245,10 +263,20 @@ watch(hover, (value) => {
 .submit-card {
   border-style: solid;
 }
+
 .aspect-ratio-container {
   position: relative;
   width: 100%;
 }
+
+.image {
+  display: block;
+}
+
+.broken-fallback {
+  box-sizing: border-box;
+}
+
 .dashed-border {
   border-style: dashed;
   opacity: 0;
@@ -258,6 +286,7 @@ watch(hover, (value) => {
 .dashed-border.visible {
   opacity: 1;
 }
+
 @keyframes spinCW {
   from {
     transform: rotate(0deg);

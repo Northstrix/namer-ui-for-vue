@@ -20,7 +20,7 @@ import SubmitCard from '../../components/namer-ui/submit-card/SubmitCard.vue'
         backgroundColor="#111014"
         cardBorderColor="#312f3b"
         innerAreaBorderColor="#312f3b"
-        aspectBgColor="#111"
+        innerAreaBgColor="#000"
         squareBgColor="#fff"
         :isRTL="false"
       />
@@ -32,7 +32,7 @@ import SubmitCard from '../../components/namer-ui/submit-card/SubmitCard.vue'
         backgroundColor="#111014"
         cardBorderColor="#312f3b"
         innerAreaBorderColor="#312f3b"
-        aspectBgColor="#18161c"
+        innerAreaBgColor="#18161c"
         :isRTL="false"
       />
 

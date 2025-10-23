@@ -11656,7 +11656,7 @@ const darkThemeProps = {
   backgroundColor: '#0a0a0a',
   borderColor: '#262626',
   innerAreaBorderColor: '#262626',
-  aspectBgColor: '#111',
+  innerAreaBgColor: '#111',
   squareBgColor: '#fff',
   plusIconColor: '#00a7fa',
   textColorTitle: '#fff',
@@ -11668,7 +11668,7 @@ const lightThemeProps = {
   backgroundColor: '#f9f9f9',
   borderColor: '#ccc',
   innerAreaBorderColor: '#d5d5d5',
-  aspectBgColor: '#e1e1e1',
+  innerAreaBgColor: '#e1e1e1',
   squareBgColor: '#222',
   plusIconColor: '#d500ff',
   textColorTitle: '#222',
@@ -11695,7 +11695,7 @@ const lightThemeProps = {
       :backgroundColor="darkThemeProps.backgroundColor"
       :cardBorderColor="darkThemeProps.borderColor"
       :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
-      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :innerAreaBgColor="darkThemeProps.innerAreaBgColor"
       :squareBgColor="darkThemeProps.squareBgColor"
       :plusIconColor="darkThemeProps.plusIconColor"
       :textColorTitle="darkThemeProps.textColorTitle"
@@ -11711,7 +11711,7 @@ const lightThemeProps = {
       :backgroundColor="lightThemeProps.backgroundColor"
       :cardBorderColor="lightThemeProps.borderColor"
       :innerAreaBorderColor="lightThemeProps.innerAreaBorderColor"
-      :aspectBgColor="lightThemeProps.aspectBgColor"
+      :innerAreaBgColor="lightThemeProps.innerAreaBgColor"
       :squareBgColor="lightThemeProps.squareBgColor"
       :plusIconColor="lightThemeProps.plusIconColor"
       :textColorTitle="lightThemeProps.textColorTitle"
@@ -11728,7 +11728,7 @@ const lightThemeProps = {
       :backgroundColor="darkThemeProps.backgroundColor"
       :cardBorderColor="darkThemeProps.borderColor"
       :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
-      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :innerAreaBgColor="darkThemeProps.innerAreaBgColor"
       :squareBgColor="darkThemeProps.squareBgColor"
       :plusIconColor="darkThemeProps.plusIconColor"
       :textColorTitle="darkThemeProps.textColorTitle"
@@ -11750,7 +11750,7 @@ const lightThemeProps = {
 // - backgroundColor: string (optional) - Background color of the outer card. Default: "#0a0a0a".
 // - cardBorderColor: string (optional) - Border color for the card container. Default: "#262626".
 // - innerAreaBorderColor: string (optional) - Border color for the inner area and the moving square. Default: "#262626".
-// - aspectBgColor: string (optional) - Background color for the inner aspect-ratio area. Default: "#111".
+// - innerAreaBgColor: string (optional) - Background color for the inner area with fixed aspect ratio. Default: "#111".
 // - squareBgColor: string (optional) - Background color for the moving square element. Default: "#fff".
 // - borderRadius: string (optional) - Radius applied to all rounded edges. Default: "8px".
 // - borderWidthOuter: string (optional) - Width of the card container border. Default: "1px".
@@ -11792,7 +11792,7 @@ const props = defineProps({
   backgroundColor: { type: String, default: "#0a0a0a" },
   cardBorderColor: { type: String, default: "#262626" },
   innerAreaBorderColor: { type: String, default: "#262626" },
-  aspectBgColor: { type: String, default: "#111" },
+  innerAreaBgColor: { type: String, default: "#111" },
   squareBgColor: { type: String, default: "#fff" },
   borderRadius: { type: String, default: "8px" },
   borderWidthOuter: { type: String, default: "1px" },
@@ -11810,11 +11810,12 @@ const props = defineProps({
   aspectRatio: { type: String, default: "16/10" },
   squareHeightPercent: { type: Number, default: 50 },
   plusIconColor: { type: String, default: "#00a7fa" },
-  imageSrc: { type: String, default: "" }
+  imageSrc: { type: String, default: "" },
 });
 
 const hover = ref(false);
 const iconState = ref<"idle" | "spinningCW" | "spinningCCW">("idle");
+const imageError = ref(false);
 
 const shiftX = computed(() => {
   let px = parseInt(props.textShiftDistance);
@@ -11822,11 +11823,15 @@ const shiftX = computed(() => {
   return props.isRTL ? -px : px;
 });
 
-const isExternal = computed(() => /^https?:\/\//i.test(props.link));
+const isExternal = computed(() => /^https?:\\/\\//i.test(props.link));
 
 watch(hover, (value) => {
   iconState.value = value ? "spinningCW" : "spinningCCW";
 });
+
+function handleImageError() {
+  imageError.value = true;
+}
 </script>
 
 <template>
@@ -11856,13 +11861,13 @@ watch(hover, (value) => {
     @mouseenter="hover = true"
     @mouseleave="hover = false"
   >
-    <!-- Image mode -->
+    <!-- Image Handling -->
     <div
       v-if="imageSrc"
       class="aspect-ratio-container"
       :style="{
         aspectRatio,
-        backgroundColor: aspectBgColor,
+        backgroundColor: innerAreaBgColor,
         border: borderWidthInner + ' solid ' + innerAreaBorderColor,
         borderRadius,
         display: 'flex',
@@ -11875,24 +11880,38 @@ watch(hover, (value) => {
       }"
     >
       <img
+        v-if="!imageError"
         :src="imageSrc"
         alt=""
+        class="image"
         :style="{
           width: '100%',
           height: '100%',
           objectFit: 'cover',
           borderRadius: borderRadius
         }"
+        @error="handleImageError"
       />
+      <div
+        v-else
+        class="broken-fallback"
+        :style="{
+          border: borderWidthInner + ' solid ' + innerAreaBorderColor,
+          borderRadius,
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'transparent'
+        }"
+      ></div>
     </div>
 
-    <!-- Regular mode -->
+    <!-- Regular Mode -->
     <div
       v-else
       class="aspect-ratio-container"
       :style="{
         aspectRatio,
-        backgroundColor: aspectBgColor,
+        backgroundColor: innerAreaBgColor,
         border: borderWidthInner + ' solid ' + innerAreaBorderColor,
         borderRadius,
         display: 'grid',
@@ -12000,7 +12019,6 @@ watch(hover, (value) => {
       >
         {{ title }}
       </h3>
-
       <p
         v-if="description"
         class="description"
@@ -12025,10 +12043,20 @@ watch(hover, (value) => {
 .submit-card {
   border-style: solid;
 }
+
 .aspect-ratio-container {
   position: relative;
   width: 100%;
 }
+
+.image {
+  display: block;
+}
+
+.broken-fallback {
+  box-sizing: border-box;
+}
+
 .dashed-border {
   border-style: dashed;
   opacity: 0;
@@ -12038,6 +12066,7 @@ watch(hover, (value) => {
 .dashed-border.visible {
   opacity: 1;
 }
+
 @keyframes spinCW {
   from {
     transform: rotate(0deg);
@@ -12065,8 +12094,507 @@ svg.spinCCW {
     ],
     dependencies: ``,
     credit: `[AnimateIcons](https://animateicons.vercel.app/)
+[Bento Grid](https://ui.aceternity.com/components/bento-grid) by [Aceternity UI](https://ui.aceternity.com/)
 [File Upload](https://ui.aceternity.com/components/file-upload) by [Aceternity UI](https://ui.aceternity.com/)`,
     previewType: 'image',
     imageLink: '/previews/submit-card.webp'
+  },
+  {
+    name: 'Halloween Submit Card',
+    route: 'halloween-submit-card',
+    description: 'A glowing animated card component with Halloween-inspired motion, gradient, and light effects.',
+    usage: `<script setup lang="ts">
+import HalloweenSubmitCard from './HalloweenSubmitCard.vue'
+</script>
+
+<template>
+  <div class="demo-container">
+    <!-- 1. LTR — Default Theme -->
+    <div class="demo-item">
+      <HalloweenSubmitCard
+        link="https://blueberry-loom-form-loader.netlify.app/form/bWF4aW0uYm9ydC5kZXZlbEBnbWFpbC5jb20=/Far247Squ6?key=Im5uylqLi3BwlN909sLP1Y3vY6nRwMixa8D6BGpj6Uz5B4b9OO)YZSyKWvCGeX65a6Yfsc2ZdUAEWrue3FXDDg=="
+        title="Submit Your Project"
+        description="Made a project that uses at least one Namer UI component? Submit it now for a chance to get featured!"
+        useDrawIcon
+        :isRTL="false"
+      />
+    </div>
+
+    <!-- 2. RTL — Deep Purple Theme -->
+    <div class="demo-item">
+      <HalloweenSubmitCard
+        link="https://blueberry-loom-form-loader.netlify.app/form/bWF4aW0uYm9ydC5kZXZlbEBnbWFpbC5jb20=/Far247Squ6?key=Im5uylqLi3BwlN909sLP1Y3vY6nRwMixa8D6BGpj6Uz5B4b9OO)YZSyKWvCGeX65a6Yfsc2ZdUAEWrue3FXDDg=="
+        title="שלח את הפרויקט שלך"
+        description="יצרת פרויקט המשתמש בלפחות רכיב אחד של נמר UI? שלח אותו עכשיו כדי לקבל הזדמנות להופיע!"
+        accent="#a800ff"
+        accentAdjacentColor="#5c00b3"
+        accentGlow="rgba(160, 0, 255, 0.85)"
+        secondInteractiveColor="#3c005c"
+        cardBg="#0a0010"
+        innerBg="#190028"
+        textColorTitle="#f4e9ff"
+        textColorDescription="#c8a2ff"
+        :isRTL="true"
+        useDrawIcon
+        :initialRotation="3.7"
+        innerBorderColor="rgba(160, 0, 255, 0.55)"
+        bodyGlow="rgba(160, 0, 255, 0.35)"
+        squareBgColor="#f4e9ff"
+        squareGlow="rgba(160, 0, 255, 0.45)"
+      />
+    </div>
+
+    <!-- 3. LTR — Blue Light Theme Variant -->
+    <div class="demo-item">
+      <HalloweenSubmitCard
+        link="https://blueberry-loom-form-loader.netlify.app/form/bWF4aW0uYm9ydC5kZXZlbEBnbWFpbC5jb20=/Far247Squ6?key=Im5uylqLi3BwlN909sLP1Y3vY6nRwMixa8D6BGpj6Uz5B4b9OO)YZSyKWvCGeX65a6Yfsc2ZdUAEWrue3FXDDg=="
+        title="Envía tu proyecto"
+        description="¿Has creado un proyecto que utilice al menos un componente de Namer UI? ¡Envíalo ahora para tener la oportunidad de ser destacado!"
+        accent="#00A7FA"
+        accentAdjacentColor="#0091E2"
+        accentGlow="rgba(0, 167, 250, 0.85)"
+        secondInteractiveColor="#66C9FF"
+        cardBg="#E1F3FF"
+        innerBg="#F4FAFF"
+        innerBorderColor="rgba(0, 167, 250, 0.4)"
+        textColorTitle="#0C2E4A"
+        textColorDescription="#1172A5"
+        bodyGlow="rgba(0, 167, 250, 0.25)"
+        squareGlow="rgba(0, 140, 230, 0.4)"
+        squareBgColor="#001B3C"
+        :isRTL="false"
+        :centerText="true"
+        :enableGlow="true"
+        :initialRotation="2.8"
+      />
+    </div>
+
+    <!-- 4. LTR — Image Card Default Theme -->
+    <div class="demo-item">
+      <HalloweenSubmitCard
+        link="https://clandestine-beauty-salon-landing-page.netlify.app/"
+        title="Clandestine"
+        description="A modern beauty salon landing page template featuring an appointment reservation UI and multilingual support."
+        imageSrc="https://github.com/Northstrix/namer-ui/blob/main/public/showcase/clandestine.webp?raw=true"
+        :enableGlow="true"
+        innerBg="#000"
+        :isRTL="false"
+        :initialRotation="1.8"
+      />
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.demo-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 40px;
+}
+
+.demo-item {
+  max-width: 376px;
+  flex: 1 1 320px;
+  display: flex;
+  justify-content: center;
+}
+</style>
+
+// Note: The HalloweenSubmitCard component accepts the following props:
+// - id: string (optional) - Unique identifier for the card instance. Default: "".
+// - isRTL: boolean (optional) - Enables right-to-left layout direction. Default: false.
+// - link: string (required) - Target URL for the clickable card. Can be a relative or external HTTP/HTTPS link.
+// - title: string (required) - Main title text displayed on the card.
+// - description: string (optional) - Supporting description text displayed below the title. Default: "".
+// - imageSrc: string (optional) - Source URL of an image. When provided, replaces the inner area content with an image preserving the aspect ratio.
+// - useDrawIcon: boolean (optional) - Enables animated drawn plus icon variant instead of the rotating one. Default: false.
+// - accent: string (optional) - Primary accent color of the card’s gradient and icon. Default: "#ff7518".
+// - accentAdjacentColor: string (optional) - Secondary tone applied to gradient transitions. Default: "#b13d00".
+// - accentGlow: string (optional) - Outer glow color for the hover highlight effect. Default: "rgba(255,117,24,0.9)".
+// - secondInteractiveColor: string (optional) - Third layered color used to create depth in the gradient. Default: "#5f1907".
+// - cardBg: string (optional) - Background color of the main card body. Default: "#0a0501".
+// - innerBg: string (optional) - Background color of the internal aspect-ratio container. Default: "#110903".
+// - textColorTitle: string (optional) - Color of the card title text. Default: "#fffbe6".
+// - textColorDescription: string (optional) - Color of the card description text. Default: "#ffa94d".
+// - enableGlow: boolean (optional) - Enables or disables glowing box-shadow effects. Default: true.
+// - innerBorderColor: string (optional) - Border color applied inside the inner container and square. Default: "rgba(255,117,24,0.5)".
+// - squareBgColor: string (optional) - Background color of the animated square element. Default: "#fdf5d4".
+// - bodyGlow: string (optional) - Ambient glow hue around the whole card. Default: "rgba(255,130,0,0.3)".
+// - squareGlow: string (optional) - Glow color for the square hover effect. Default: "rgba(255,117,24,0.5)".
+// - initialRotation: number (optional) - Starting angle for the gradient rotation in radians. Default: 2.5.
+// - centerText: boolean (optional) - Centers the title and description text horizontally. Default: false.
+// - aspectRatio: string (optional) - Aspect ratio for the inner visual container (CSS value like "16/10"). Default: "16/10".
+// - plusIconDurationMs: number (optional) - Duration in milliseconds for the plus icon rotation animation. Default: 400.
+// - textShiftDurationMs: number (optional) - Duration in milliseconds for text horizontal translation on hover. Default: 200.
+// - otherDurationMs: number (optional) - Duration for other transitions such as border and container movement. Default: 300.
+// - squareHeightPercent: number (optional) - Height percentage of the inner square relative to the container. Default: 50.
+// - textShiftDistance: string (optional) - Distance text shifts horizontally on hover. Default: "6px".
+//
+// Emits:
+//   None (all hover animations and link actions are internal).
+//
+// Slots:
+//   None.
+`,
+    code: [
+      {
+        filename: 'HalloweenSubmitCard.vue',
+        content: `<script setup lang="ts">
+import { ref, computed } from "vue";
+
+const props = defineProps({
+  id: { type: String, default: "" },
+  isRTL: { type: Boolean, default: false },
+  link: { type: String, required: true },
+  title: { type: String, required: true },
+  description: { type: String, default: "" },
+  imageSrc: { type: String, default: "" },
+  useDrawIcon: { type: Boolean, default: false },
+
+  // Theme props
+  accent: { type: String, default: "#ff7518" },
+  accentAdjacentColor: { type: String, default: "#b13d00" },
+  accentGlow: { type: String, default: "rgba(255,117,24,0.9)" },
+  secondInteractiveColor: { type: String, default: "#5f1907" },
+  cardBg: { type: String, default: "#0a0501" },
+  innerBg: { type: String, default: "#110903" },
+  textColorTitle: { type: String, default: "#fffbe6" },
+  textColorDescription: { type: String, default: "#ffa94d" },
+  enableGlow: { type: Boolean, default: true },
+  innerBorderColor: { type: String, default: "rgba(255,117,24,0.5)" },
+  squareBgColor: { type: String, default: "#fdf5d4" },
+  bodyGlow: { type: String, default: "rgba(255,130,0,0.3)" },
+  squareGlow: { type: String, default: "rgba(255,117,24,0.5)" },
+  initialRotation: { type: Number, default: 2.5 },
+  centerText: { type: Boolean, default: false },
+
+  aspectRatio: { type: String, default: "16/10" },
+  plusIconDurationMs: { type: Number, default: 400 },
+  textShiftDurationMs: { type: Number, default: 200 },
+  otherDurationMs: { type: Number, default: 300 },
+  squareHeightPercent: { type: Number, default: 50 },
+  textShiftDistance: { type: String, default: "6px" },
+});
+
+const hover = ref(false);
+const iconState = ref<"idle" | "cw" | "ccw">("idle");
+const imageError = ref(false);
+const angle = ref(props.initialRotation);
+
+const shiftX = computed(() => {
+  let px = parseInt(props.textShiftDistance);
+  if (isNaN(px)) px = 6;
+  return props.isRTL ? -px : px;
+});
+
+const isExternal = computed(() => /^https?:\\/\\//i.test(props.link));
+
+const showRegularIconBlock = computed(() => !props.imageSrc);
+const showImage = computed(() => props.imageSrc && !imageError.value);
+const showBrokenFallback = computed(() => props.imageSrc && imageError.value);
+
+function handleMouseMove(e: MouseEvent) {
+  const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+  const x = e.clientX - rect.left - rect.width / 2;
+  const y = e.clientY - rect.top - rect.height / 2;
+  angle.value = Math.atan2(-x, y);
+}
+
+function handleEnter() {
+  hover.value = true;
+  iconState.value = "cw";
+}
+function handleLeave() {
+  hover.value = false;
+  iconState.value = "ccw";
+}
+
+function handleImageError() {
+  imageError.value = true;
+}
+
+const gradient = computed(() => {
+  return \`linear-gradient(to bottom, \${props.cardBg}CC, \${props.cardBg}CC),
+          linear-gradient(\${angle.value}rad,
+                          \${props.accent} 0%,
+                          \${props.accentAdjacentColor} 50%,
+                          \${props.secondInteractiveColor} 90%)\`;
+});
+
+const baseShadow = computed(() =>
+  props.enableGlow
+    ? \`0 0 0 1px rgba(255,255,255,0.08), 0 0 20px \${props.bodyGlow}, 0 0 40px \${props.bodyGlow}\`
+    : \`0 0 0 1px rgba(255,255,255,0.08)\`
+);
+const hoverShadow = computed(() =>
+  props.enableGlow
+    ? \`0 0 35px \${props.accentGlow}, 0 0 80px \${props.accentGlow}, inset 0 0 20px \${props.accentGlow}\`
+    : baseShadow.value
+);
+</script>
+
+<template>
+  <a
+    class="halloween-card"
+    :href="link"
+    :target="isExternal ? '_blank' : null"
+    :rel="isExternal ? 'noopener noreferrer' : null"
+    :style="{
+      direction: isRTL ? 'rtl' : 'ltr',
+      backgroundImage: gradient,
+      boxShadow: hover ? hoverShadow : baseShadow,
+    }"
+    @mouseenter="handleEnter"
+    @mouseleave="handleLeave"
+    @mousemove="handleMouseMove"
+  >
+    <!-- Area block -->
+    <div
+      class="aspect-container"
+      :style="{
+        aspectRatio,
+        backgroundColor: innerBg,
+        borderColor: innerBorderColor,
+        transform: isRTL ? 'scaleX(-1)' : 'none'
+      }"
+    >
+      <!-- Case 1: valid image -->
+      <img
+        v-if="showImage"
+        :src="imageSrc"
+        :alt="title"
+        class="image"
+        @error="handleImageError"
+      />
+
+      <!-- Case 2: broken image fallback -->
+      <div
+        v-else-if="showBrokenFallback"
+        class="broken-fallback"
+        :style="{
+          borderColor: innerBorderColor,
+          aspectRatio,
+        }"
+      ></div>
+
+      <!-- Case 3: regular square + plus -->
+      <template v-else-if="showRegularIconBlock">
+        <div
+          class="dashed-square"
+          :class="{ visible: hover }"
+          :style="{ borderColor: accent }"
+        ></div>
+
+        <div
+          class="square"
+          :style="{
+            backgroundColor: squareBgColor,
+            borderColor: innerBorderColor,
+            transform: hover
+              ? 'translate(calc(-50% + 15px), calc(-50% - 15px))'
+              : 'translate(-50%, -50%)',
+            boxShadow: enableGlow
+              ? hover
+                ? '0 0 40px ' + squareGlow
+                : '0 0 20px ' + squareGlow
+              : 'none'
+          }"
+        >
+          <!-- Plus Icon -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="42"
+            height="42"
+            viewBox="0 0 24 24"
+            fill="none"
+            :stroke="accent"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            :class="{
+              spinCW: iconState === 'cw',
+              spinCCW: iconState === 'ccw'
+            }"
+            :style="{ '--plusDur': plusIconDurationMs + 'ms' }"
+          >
+            <path d="M5 12h14" />
+            <path d="M12 5v14" />
+          </svg>
+        </div>
+      </template>
+    </div>
+
+    <!-- Text content -->
+    <div
+      class="text-content"
+      :style="{
+        textAlign: centerText ? 'center' : isRTL ? 'right' : 'left',
+        transform: hover ? \`translateX(\${shiftX}px)\` : 'translateX(0)',
+        transition: \`transform \${textShiftDurationMs}ms ease\`
+      }"
+    >
+      <h3
+        class="title"
+        :style="{ color: textColorTitle, textShadow: '0 0 8px ' + accent }"
+      >
+        {{ title }}
+      </h3>
+      <p
+        v-if="description"
+        class="description"
+        :style="{ color: textColorDescription }"
+      >
+        {{ description }}
+      </p>
+    </div>
+  </a>
+</template>
+
+<style scoped>
+.halloween-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 360px;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  padding: 16px;
+  box-sizing: border-box;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  background-color: transparent;
+  transition: box-shadow 0.45s ease, transform 0.45s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.aspect-container {
+  position: relative;
+  width: 100%;
+  border: 2px solid;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+}
+
+/* Empty outlined fallback box for broken image */
+.broken-fallback {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid;
+  border-radius: 16px;
+  background-color: transparent;
+}
+
+/* Animated dashed */
+.dashed-square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 50%;
+  aspect-ratio: 1 / 1;
+  border: 2px dashed;
+  border-radius: 16px;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.dashed-square.visible {
+  opacity: 1;
+}
+
+/* Square + icon area */
+.square {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1 / 1;
+  height: 50%;
+  border: 1px solid;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  transition: transform 0.5s ease, box-shadow 0.5s ease;
+  overflow: visible;
+}
+
+/* Plus Icon Animation */
+@keyframes spinCW {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinCCW {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+svg.spinCW {
+  animation: spinCW var(--plusDur, 400ms) ease-in-out 1;
+}
+svg.spinCCW {
+  animation: spinCCW var(--plusDur, 400ms) ease-in-out 1;
+}
+
+/* Text Styling */
+.text-content {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  user-select: none;
+  transition: transform 0.3s ease;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.description {
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-height: 1.5;
+}
+</style>
+` }
+    ],
+    dependencies: ``,
+    credit: `[AnimateIcons](https://animateicons.vercel.app/)
+[Bento Grid](https://ui.aceternity.com/components/bento-grid) by [Aceternity UI](https://ui.aceternity.com/)
+[File Upload](https://ui.aceternity.com/components/file-upload) by [Aceternity UI](https://ui.aceternity.com/)
+[Vercel app border hover effect](https://codepen.io/Juxtopposed/pen/xxQNozB) by [Juxtopposed](https://codepen.io/Juxtopposed)`,
+    previewType: 'image',
+    imageLink: '/previews/halloween-submit-card.webp'
   },
 ];

@@ -6,7 +6,7 @@ const darkThemeProps = {
   backgroundColor: '#0a0a0a',
   borderColor: '#262626',
   innerAreaBorderColor: '#262626',
-  aspectBgColor: '#111',
+  innerAreaBgColor: '#111',
   squareBgColor: '#fff',
   plusIconColor: '#00a7fa',
   textColorTitle: '#fff',
@@ -18,7 +18,7 @@ const lightThemeProps = {
   backgroundColor: '#f9f9f9',
   borderColor: '#ccc',
   innerAreaBorderColor: '#d5d5d5',
-  aspectBgColor: '#e1e1e1',
+  innerAreaBgColor: '#e1e1e1',
   squareBgColor: '#222',
   plusIconColor: '#d500ff',
   textColorTitle: '#222',
@@ -45,7 +45,7 @@ const lightThemeProps = {
       :backgroundColor="darkThemeProps.backgroundColor"
       :cardBorderColor="darkThemeProps.borderColor"
       :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
-      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :innerAreaBgColor="darkThemeProps.innerAreaBgColor"
       :squareBgColor="darkThemeProps.squareBgColor"
       :plusIconColor="darkThemeProps.plusIconColor"
       :textColorTitle="darkThemeProps.textColorTitle"
@@ -61,7 +61,7 @@ const lightThemeProps = {
       :backgroundColor="lightThemeProps.backgroundColor"
       :cardBorderColor="lightThemeProps.borderColor"
       :innerAreaBorderColor="lightThemeProps.innerAreaBorderColor"
-      :aspectBgColor="lightThemeProps.aspectBgColor"
+      :innerAreaBgColor="lightThemeProps.innerAreaBgColor"
       :squareBgColor="lightThemeProps.squareBgColor"
       :plusIconColor="lightThemeProps.plusIconColor"
       :textColorTitle="lightThemeProps.textColorTitle"
@@ -78,7 +78,7 @@ const lightThemeProps = {
       :backgroundColor="darkThemeProps.backgroundColor"
       :cardBorderColor="darkThemeProps.borderColor"
       :innerAreaBorderColor="darkThemeProps.innerAreaBorderColor"
-      :aspectBgColor="darkThemeProps.aspectBgColor"
+      :innerAreaBgColor="darkThemeProps.innerAreaBgColor"
       :squareBgColor="darkThemeProps.squareBgColor"
       :plusIconColor="darkThemeProps.plusIconColor"
       :textColorTitle="darkThemeProps.textColorTitle"
