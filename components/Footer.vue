@@ -93,6 +93,82 @@ function onMouseLeave() {
           class="footer-link"
         >Perplexity</a>
       </div>
+
+      <!-- Badges column -->
+      <div
+        :style="{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }"
+      >
+        <!-- Verified Tools badge -->
+        <a
+          href="https://www.verifiedtools.info"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src="https://www.verifiedtools.info/badge.png"
+            alt="Verified on Verified Tools"
+            width="200"
+            height="54"
+            :style="{
+              maxWidth: '100%',
+              height: 'auto',
+              display: 'block',
+            }"
+          />
+        </a>
+
+        <div
+          :style="{
+            height: '9px',
+          }"
+        ></div>
+
+        <!-- Startup Fame badge -->
+        <a
+          href="https://startupfa.me/s/namer-ui-1?utm_source=namer-ui-for-vue.netlify.app"
+          target="_blank"
+        >
+          <img
+            src="https://startupfa.me/badges/featured/dark.webp"
+            alt="Namer UI For Vue - Featured on Startup Fame"
+            width="171"
+            height="54"
+            :style="{
+              maxWidth: '100%',
+              height: 'auto',
+              display: 'block',
+            }"
+          />
+        </a>
+
+        <div
+          :style="{
+            height: '15px',
+          }"
+        ></div>
+
+        <!-- Aura++ badge -->
+        <a
+          href="https://auraplusplus.com/projects/namer-ui-for-vue"
+          target="_blank"
+          rel="noopener"
+        >
+          <img
+            src="https://auraplusplus.com/images/badges/featured-on-light.svg"
+            alt="Featured on Aura++"
+            :style="{
+              maxWidth: '100%',
+              height: '54px',
+              display: 'block'
+            }"
+          />
+        </a>
+      </div>
+            
       <div class="footer-namer-ui">
         <svg
           width="100%"
