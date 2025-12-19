@@ -45,6 +45,8 @@ The existence of this project (at least in its current form) wouldn't've been po
 
 [AnimateIcons](https://animateicons.vercel.app/)
 
+[Google AI Studio](https://aistudio.google.com/)
+
 [File Upload](https://ui.aceternity.com/components/file-upload) by [Aceternity UI](https://ui.aceternity.com/)
 
 [Perplexity](https://www.perplexity.ai/)
