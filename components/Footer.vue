@@ -72,26 +72,40 @@ function onMouseLeave() {
     <div class="content-container footer-content">
       <div class="footer-top" :style="{ fontSize: textSize }">
         Made by
-        <a
-          href="https://maxim-bortnikov.netlify.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="footer-link"
-        >Maxim Bortnikov</a>
-        using
-        <a
-          href="https://nuxt.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="footer-link"
-        >Nuxt</a>
-        and
-        <a
-          href="https://www.perplexity.ai/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="footer-link"
-        >Perplexity</a>
+        <span class="link-group">
+          <a
+            href="https://maxim-bortnikov.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link"
+          >Maxim Bortnikov</a>
+        </span>
+        <span class="text-group">using</span>
+        <span class="link-group">
+          <a
+            href="https://nuxt.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link"
+          >Nuxt</a>,
+        </span>
+        <span class="link-group">
+          <a
+            href="https://www.perplexity.ai/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link"
+          >Perplexity</a>,
+        </span>
+        <span class="text-group">and</span>
+        <span class="link-group">
+          <a
+            href="https://aistudio.google.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="footer-link"
+          >Google AI Studio</a>
+        </span>
       </div>
 
       <!-- Badges column -->
@@ -123,31 +137,7 @@ function onMouseLeave() {
 
         <div
           :style="{
-            height: '9px',
-          }"
-        ></div>
-
-        <!-- Startup Fame badge -->
-        <a
-          href="https://startupfa.me/s/namer-ui-1?utm_source=namer-ui-for-vue.netlify.app"
-          target="_blank"
-        >
-          <img
-            src="https://startupfa.me/badges/featured/dark.webp"
-            alt="Namer UI For Vue - Featured on Startup Fame"
-            width="171"
-            height="54"
-            :style="{
-              maxWidth: '100%',
-              height: 'auto',
-              display: 'block',
-            }"
-          />
-        </a>
-
-        <div
-          :style="{
-            height: '15px',
+            height: '8px',
           }"
         ></div>
 
@@ -164,6 +154,33 @@ function onMouseLeave() {
               maxWidth: '100%',
               height: '54px',
               display: 'block'
+            }"
+          />
+        </a>
+
+        <div
+          :style="{
+            height: '15px',
+          }"
+        ></div>
+
+        <!-- LaunchIt badge -->
+        <a
+          href="https://launchit.site/launches/namer-ui-for-vue"
+          target="_blank"
+          rel="noopener noreferrer"
+          style="display: block;"
+        >
+          <img
+            src="https://launchit.site/badges/featured-light-v2.svg"
+            alt="Namer UI For Vue - Featured on LaunchIt"
+            width="250"
+            height="54"
+            :style="{
+              maxWidth: '100%',
+              height: 'auto',
+              display: 'block',
+              objectFit: 'contain'
             }"
           />
         </a>
@@ -304,15 +321,22 @@ function onMouseLeave() {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 0;
+  gap: 0.32em;
   margin-bottom: 1.4rem;
+}
+.link-group, .text-group {
+  display: inline-flex;
+  align-items: center;
+}
+.text-group {
+  color: white;
 }
 .footer-link {
   color: white;
   text-decoration: none;
   position: relative;
   transition: color 0.3s ease;
-  margin: 0 0.32em;
+  margin: 0; /* No margins on links */
 }
 .footer-link:hover {
   color: #6cc606;
