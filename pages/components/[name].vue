@@ -173,7 +173,11 @@ watch(
         />
 
         <!-- Preview area: live demo or fallback placeholder -->
-        <div v-show="activeTab === 'preview'" class="demo-preview-container">
+        <div
+          v-show="activeTab === 'preview'"
+          class="demo-preview-container"
+          :style="meta?.noPadding ? { padding: '0' } : { padding: '24px' }"
+        >
           <template v-if="demoExists">
             <client-only>
               <component :is="demoComponent(meta.route)" />
@@ -276,7 +280,6 @@ watch(
   margin-bottom: 18px;
 }
 .demo-preview-container {
-  padding: 24px;
   min-height: 300px;
   width: 100%;
   box-sizing: border-box;
@@ -289,6 +292,7 @@ watch(
   border-radius: 8px;
   transition: border-color 0.2s;
 }
+
 .preview-placeholder {
   color: #888;
   font-size: 1.1rem;
