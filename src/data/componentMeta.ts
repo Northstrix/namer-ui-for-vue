@@ -14120,4 +14120,416 @@ Credit for the sounds can be found [here](https://github.com/Northstrix/onda-sfa
     imageLink: "/previews/glassmorphic-flashcard.webp",
     noPadding: true,
   },
+  {
+    name: 'Shifting Text',
+    route: 'shifting-text',
+    description: 'An animated component that vertically shifts text with configurable timing, colors, and other properties.',
+    usage: `<template>
+  <div class="wrap">
+    <ShiftingText text="Namer UI" :fontSize="'160px'" :intensity="0.64" />
+    <ShiftingText
+      text="נמר UI"
+      direction="rtl"
+      :fontSize="'128px'"
+      :intensity="0.98"
+      :amplitude="4"
+      :centerOffset="22"
+      :pace="16"
+      :enter="300"
+      :hold="70"
+      :exit="9"
+      :pause="90"
+      :liveVisibleAtHome="false"
+      :fontWeight="700"
+      letterSpacing="0.2em"
+      :frontColor="['#5300FA', '#00A7FA', '#D000FA']"
+      :backColor="['#291255', '#1D3B54', '#491854']"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import ShiftingText from "./ShiftingText.vue";
+</script>
+
+<style scoped>
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 160px;
+  width: 100%;
+  height: 100%;
+  padding: 128px 0;
+}
+</style>
+
+// Note: The ShiftingText component accepts the following props:
+// - text: string (optional) - Text to display and animate. Default: "Namer UI".
+// - className: string (optional) - Class name applied to the outer text container. Default: "".
+// - stageClassName: string (optional) - Class name applied to the stage wrapper. Default: "".
+// - direction: "ltr" | "rtl" (optional) - Text direction for layout and rendering. Default: "ltr".
+// - fontFamily: string (optional) - Font family used for the text. Default: "'Recursive', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif".
+// - fontSize: string (optional) - Font size for the text. Default: "clamp(52px, 10vw, 116px)".
+// - fontWeight: number | string (optional) - Font weight for the text. Default: 600.
+// - letterSpacing: string (optional) - Letter spacing applied to the text. Default: "-0.02em".
+// - lineHeight: string | number (optional) - Line height applied to the text. Default: 1.
+// - backFontOpacity: number (optional) - Opacity of the background text. Default: 0.2.
+// - showBackFont: boolean (optional) - Controls whether the background text is shown. Default: true.
+// - showLive: boolean (optional) - Controls whether the live animated text is shown. Default: true.
+// - liveOnTop: boolean (optional) - Controls whether the live text renders above the background text. Default: true.
+// - liveVisibleAtHome: boolean (optional) - Keeps the live text visible at its resting position when enabled. Default: true.
+// - intensity: number (optional) - Overall strength of the vertical shift effect. Default: 0.64.
+// - amplitude: number (optional) - Base amplitude used for vertical motion. Default: 32.
+// - centerOffset: number (optional) - Additional offset applied around the center of the text. Default: 22.
+// - pace: number (optional) - Per-segment frame delay used to stagger animation timing. Default: 5.
+// - enter: number (optional) - Number of frames used for the enter phase. Default: 40.
+// - hold: number (optional) - Number of frames used for the hold phase. Default: 40.
+// - exit: number (optional) - Number of frames used for the exit phase. Default: 36.
+// - pause: number (optional) - Number of frames used for the pause phase. Default: 44.
+// - easingIn: "out" | "in" | "inOut" | "outBack" | "bounce" (optional) - Easing function used during the enter phase. Default: "out".
+// - easingOut: "out" | "in" | "inOut" | "outBack" | "bounce" (optional) - Easing function used during the exit phase. Default: "in".
+// - loop: boolean (optional) - Controls whether the animation loops continuously. Default: true.
+// - splitBy: "char" | "word" | "grapheme" (optional) - How the text is split into segments. Default: "grapheme".
+// - frontColor: string | string[] (optional) - Color or color array used for the live text. Default: ["#fff", "#00a7fa"].
+// - backColor: string | string[] (optional) - Color or color array used for the background text. Default: ["#aaa"].
+// - frontShadow: string | string[] (optional) - Shadow or shadow array used for the live text. Default: "none".
+// - backShadow: string | string[] (optional) - Shadow or shadow array used for the background text. Default: "none".
+// - frontStroke: string | string[] (optional) - Stroke color or stroke array used for the live text. Default: "transparent".
+// - backStroke: string | string[] (optional) - Stroke color or stroke array used for the background text. Default: "transparent".
+// - frontStrokeWidth: number (optional) - Stroke width used for the live text. Default: 0.
+// - backStrokeWidth: number (optional) - Stroke width used for the background text. Default: 0.
+// - stageStyle: Record<string, string | number> (optional) - Inline styles applied to the stage wrapper. Default: {}.
+// - textStyle: Record<string, string | number> (optional) - Inline styles applied to the text container. Default: {}.
+// - ghostStyle: Record<string, string | number> (optional) - Inline styles applied to the background text layer. Default: {}.
+// - liveStyle: Record<string, string | number> (optional) - Inline styles applied to the live animated text layer. Default: {}.
+//
+// Emits:
+// - None.
+//
+// Slots:
+// - None.
+//
+// Usage notes:
+// - Renders a two-layer animated text effect with a static ghost layer and a live animated layer.
+// - The animation is fully client-side and starts on mount.
+// - The live layer animates each segment vertically with staggered timing.
+// - Color, shadow, and stroke props can be a single value or an array that cycles by segment.
+// - The component is designed for flexible text motion and styling without external CSS dependencies.
+`,
+    code: [
+      {
+        filename: 'ShiftingText.vue',
+        content: `<template>
+  <div :dir="direction" :class="stageClassName" :style="stageStyle">
+    <div
+      :dir="direction"
+      :class="className"
+      ref="root"
+      :style="{
+        position: 'relative',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily,
+        fontSize,
+        fontWeight,
+        letterSpacing,
+        lineHeight: lineHeightValue,
+        direction,
+        ...textStyle
+      }"
+    >
+      <div
+        v-if="showBackFont"
+        aria-hidden="true"
+        :style="{
+          position: 'relative',
+          zIndex: ghostZ,
+          display: 'flex',
+          opacity: backFontOpacity,
+          userSelect: 'none',
+          pointerEvents: 'none',
+          direction,
+          ...ghostStyle
+        }"
+      >
+        <span
+          v-for="(ch, i) in chars"
+          :key="\`ghost-\${i}\`"
+          :style="{
+            display: 'inline-block',
+            whiteSpace: 'pre',
+            color: pick(backColors, i),
+            textShadow: pick(backShadows, i),
+            WebkitTextStroke: \`\${backStrokeWidth}px \${pick(backStrokes, i)}\`
+          }"
+        >
+          {{ ch === " " ? "\\u00a0" : ch }}
+        </span>
+      </div>
+
+      <div
+        v-if="showLive"
+        aria-hidden="true"
+        :style="{
+          position: 'absolute',
+          inset: 0,
+          zIndex: liveZ,
+          display: 'flex',
+          pointerEvents: 'none',
+          direction,
+          ...liveStyle
+        }"
+      >
+        <span
+          v-for="(ch, i) in chars"
+          :key="\`live-\${i}\`"
+          :ref="(el) => setCharRef(el, i)"
+          :style="{
+            display: 'inline-block',
+            whiteSpace: 'pre',
+            willChange: 'transform, opacity',
+            opacity: liveVisibleAtHome ? 1 : 0,
+            transform: 'translateY(0px)',
+            color: pick(frontColors, i),
+            textShadow: pick(frontShadows, i),
+            WebkitTextStroke: \`\${frontStrokeWidth}px \${pick(frontStrokes, i)}\`
+          }"
+        >
+          {{ ch === " " ? "\\u00a0" : ch }}
+        </span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { computed, onBeforeUnmount, onMounted, ref, watch } from "vue";
+
+type EasingName = "out" | "in" | "inOut" | "outBack" | "bounce";
+type ColorInput = string | string[];
+type Direction = "ltr" | "rtl";
+type SplitMode = "char" | "word" | "grapheme";
+
+type ShiftingTextProps = {
+  text?: string;
+  className?: string;
+  stageClassName?: string;
+  direction?: Direction;
+  fontFamily?: string;
+  fontSize?: string;
+  fontWeight?: number | string;
+  letterSpacing?: string;
+  lineHeight?: string | number;
+  backFontOpacity?: number;
+  showBackFont?: boolean;
+  showLive?: boolean;
+  liveOnTop?: boolean;
+  liveVisibleAtHome?: boolean;
+  intensity?: number;
+  amplitude?: number;
+  centerOffset?: number;
+  pace?: number;
+  enter?: number;
+  hold?: number;
+  exit?: number;
+  pause?: number;
+  easingIn?: EasingName;
+  easingOut?: EasingName;
+  loop?: boolean;
+  splitBy?: SplitMode;
+  frontColor?: ColorInput;
+  backColor?: ColorInput;
+  frontShadow?: ColorInput;
+  backShadow?: ColorInput;
+  frontStroke?: ColorInput;
+  backStroke?: ColorInput;
+  frontStrokeWidth?: number;
+  backStrokeWidth?: number;
+  stageStyle?: Record<string, string | number>;
+  textStyle?: Record<string, string | number>;
+  ghostStyle?: Record<string, string | number>;
+  liveStyle?: Record<string, string | number>;
+};
+
+const props = withDefaults(defineProps<ShiftingTextProps>(), {
+  text: "Namer UI",
+  className: "",
+  stageClassName: "",
+  direction: "ltr",
+  fontFamily: "'Recursive', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+  fontSize: "clamp(52px, 10vw, 116px)",
+  fontWeight: 600,
+  letterSpacing: "-0.02em",
+  lineHeight: 1,
+  backFontOpacity: 0.2,
+  showBackFont: true,
+  showLive: true,
+  liveOnTop: true,
+  liveVisibleAtHome: true,
+  intensity: 0.64,
+  amplitude: 32,
+  centerOffset: 22,
+  pace: 5,
+  enter: 40,
+  hold: 40,
+  exit: 36,
+  pause: 44,
+  easingIn: "out",
+  easingOut: "in",
+  loop: true,
+  splitBy: "grapheme",
+  frontColor: () => ["#fff", "#00a7fa"],
+  backColor: () => ["#aaa"],
+  frontShadow: () => "none",
+  backShadow: () => "none",
+  frontStroke: () => "transparent",
+  backStroke: () => "transparent",
+  frontStrokeWidth: 0,
+  backStrokeWidth: 0,
+  stageStyle: () => ({}),
+  textStyle: () => ({}),
+  ghostStyle: () => ({}),
+  liveStyle: () => ({}),
+});
+
+const chars = computed(() => splitText(props.text, props.splitBy));
+const liveRefs = ref<(HTMLSpanElement | null)[]>([]);
+const frame = ref(0);
+let raf = 0;
+
+const ease: Record<EasingName, (t: number) => number> = {
+  out: (t) => 1 - (1 - t) ** 3,
+  in: (t) => t ** 3,
+  inOut: (t) => (t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2),
+  outBack: (t) => {
+    const c1 = 1.70158;
+    const c3 = c1 + 1;
+    return 1 + c3 * (t - 1) ** 3 + c1 * (t - 1) ** 2;
+  },
+  bounce: (t) => {
+    const n = 7.5625;
+    const d = 2.75;
+    if (t < 1 / d) return n * t * t;
+    if (t < 2 / d) return n * (t -= 1.5 / d) * t + 0.75;
+    if (t < 2.5 / d) return n * (t -= 2.25 / d) * t + 0.9375;
+    return n * (t -= 2.625 / d) * t + 0.984375;
+  }
+};
+
+function splitText(text: string, splitBy: SplitMode): string[] {
+  if (splitBy === "word") return text.split(/(\s+)/).filter(Boolean);
+  if (splitBy === "char") return Array.from(text);
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    const seg = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+    return Array.from(seg.segment(text), (s) => s.segment);
+  }
+  return Array.from(text);
+}
+
+function normalizeColorSet(value: ColorInput | undefined, fallback: string[]): string[] {
+  if (Array.isArray(value)) return value.length ? value : fallback;
+  return value ? [value] : fallback;
+}
+
+function pick(arr: string[], index: number): string {
+  return arr[index % arr.length];
+}
+
+function cyc(
+  f: number,
+  offset: number,
+  enter: number,
+  hold: number,
+  exit: number,
+  pause: number,
+  eIn: (t: number) => number,
+  eOut: (t: number) => number
+): number {
+  if (f < offset) return 0;
+  const total = enter + hold + exit + pause;
+  const t = (f - offset) % total;
+  if (t < enter) return eIn(t / enter);
+  if (t < enter + hold) return 1;
+  if (t < enter + hold + exit) return 1 - eOut((t - enter - hold) / exit);
+  return 0;
+}
+
+const frontColors = computed(() => normalizeColorSet(props.frontColor, ["#fff", "#00a7fa"]));
+const backColors = computed(() => normalizeColorSet(props.backColor, ["#aaa"]));
+const frontShadows = computed(() => normalizeColorSet(props.frontShadow, ["none"]));
+const backShadows = computed(() => normalizeColorSet(props.backShadow, ["none"]));
+const frontStrokes = computed(() => normalizeColorSet(props.frontStroke, ["transparent"]));
+const backStrokes = computed(() => normalizeColorSet(props.backStroke, ["transparent"]));
+
+const lineHeightValue = computed(() =>
+  typeof props.lineHeight === "number" ? String(props.lineHeight) : props.lineHeight
+);
+
+const liveZ = computed(() => (props.liveOnTop ? 2 : 0));
+const ghostZ = computed(() => (props.liveOnTop ? 1 : 2));
+
+function setCharRef(el: Element | null, i: number) {
+  liveRefs.value[i] = el as HTMLSpanElement | null;
+}
+
+function tick() {
+  const N = chars.value.length;
+  const center = (N - 1) / 2;
+  const eIn = ease[props.easingIn];
+  const eOut = ease[props.easingOut];
+
+  chars.value.forEach((_, i) => {
+    const el = liveRefs.value[i];
+    if (!el) return;
+
+    const phase = cyc(
+      frame.value,
+      i * props.pace,
+      props.enter,
+      props.hold,
+      props.exit,
+      props.pause,
+      eIn,
+      eOut
+    );
+
+    const dist = (Math.abs(i - center) * props.amplitude + props.centerOffset) * props.intensity;
+    const dir = i % 2 === 0 ? -1 : 1;
+
+    el.style.transform = \`translateY(\${dir * dist * phase}px)\`;
+    el.style.opacity = \`\${props.liveVisibleAtHome ? 1 : phase}\`;
+  });
+
+  frame.value += 1;
+  if (props.loop) raf = requestAnimationFrame(tick);
+}
+
+onMounted(() => {
+  raf = requestAnimationFrame(tick);
+});
+
+onBeforeUnmount(() => {
+  cancelAnimationFrame(raf);
+});
+
+watch(
+  () => [props.text, props.splitBy],
+  () => {
+    frame.value = 0;
+    liveRefs.value = [];
+  }
+);
+</script>
+
+<style scoped>
+/* Scoped only; animation and sizing are inline so outside CSS does not bleed in. */
+</style>
+  ` }
+    ],
+    credit: `[Vertical Fan | Text Loop Timeline Animation](https://codepen.io/jpbelley/pen/JobwWaP) by [JP](https://codepen.io/jpbelley)`,
+    previewType: 'center',
+  },
 ];
